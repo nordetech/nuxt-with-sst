@@ -1,15 +1,19 @@
 {
   "name": "nuxt-app",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "build": "pnpm sst bind nuxt build",
+    "dev": "pnpm sst bind nuxt dev",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "dependencies": {
+    "@nuxt/image": "1.0.0-rc.1"
+  },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "nuxt": "^3.7.1"
+    "nuxt": "^3.7.1",
+    "sst": "^2.24.27"
   }
 }

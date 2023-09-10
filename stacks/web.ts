@@ -1,30 +1,17 @@
-import { StackContext, Api, EventBus } from "sst/constructs";
+import { Config, StackContext } from "sst/constructs"
+import { NuxtSite } from "./NuxtSite"
 
 export function Web({ stack }: StackContext) {
-  const bus = new EventBus(stack, "bus", {
-    defaults: {
-      retries: 10,
-    },
-  });
+	const site = new NuxtSite(stack, "NuxtSite", {
+		path: "web",
+		buildCommand: "pnpm build",
+		runtime: "nodejs18.x",
+		environment: {
+			BASE_DOMAIN: "d151rbni6h406l.cloudfront.net",
+		},
+	})
 
-  const api = new Api(stack, "api", {
-    defaults: {
-      function: {
-        bind: [bus],
-      },
-    },
-    routes: {
-      "GET /": "packages/functions/src/lambda.handler",
-      "GET /todo": "packages/functions/src/todo.list",
-      "POST /todo": "packages/functions/src/todo.create",
-    },
-  });
-
-  bus.subscribe("todo.created", {
-    handler: "packages/functions/src/events/todo-created.handler",
-  });
-
-  stack.addOutputs({
-    ApiEndpoint: api.url,
-  });
+	stack.addOutputs({
+		Url: site.url,
+	})
 }
